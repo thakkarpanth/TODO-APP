@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  
+  <title>Todo List</title>
+
+   <style>
+		body{
+  background: #352f5b;
+}
+.container{
+  max-width: 400px;
+}
+input[type=text],
+input[type=text]:focus{
+  color: #fff;
+  border: none;
+  background: rgba(0,0,0,0.2);
+  max-width: 400px;
+}
+.todos li{
+  background: #423a6f;
+}
+.delete{
+  cursor: pointer;
+}
+   </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header class="text-center text-light my-4">
+      <h1 class="mb-4">Todo List</h1>
+      <form class="search">
+        <input class="form-control m-auto" type="text" name="search" placeholder="search todos" />
+      </form>
+    </header>
+
+    <ul class="list-group todos mx-auto text-light">
+      </ul>
+
+    <form class="add text-center my-4">
+      <label class="text-light">Add a new todo...</label>
+      <input class="form-control m-auto" type="text" name="add" />
+    </form>
+
+  </div>
+  
+
+  <script>
+		const addForm = document.querySelector('.add');
+		const list = document.querySelector('.todos');
+		
+		var retrievedData = localStorage.getItem("localTodos");
+    		var displayTodos  = JSON.parse(retrievedData);
+		
+		for(index = 0  ; index < displayTodos.length ; index++)
+    		{
+			
+			 const html = `
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>${displayTodos[index]}</span>
+      <i class="far fa-trash-alt delete"></i>
+    </li>
+  `;
+  list.innerHTML += html; 
+    		}
+		
+
+
+
+var pikachika = [] ; 
+const generateTemplate = todo => {
+  const html = `
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>${todo}</span>
+      <i class="far fa-trash-alt delete"></i>
+    </li>
+  `;
+  list.innerHTML += html;
+};
+
+// add todos
+addForm.addEventListener('submit', e => {
+  
+  e.preventDefault();
+  const todo = addForm.add.value.trim();
+
+  if(todo.length){
+    pikachika.push(todo) ; 
+    console.log(todo);
+    generateTemplate(todo);
+    addForm.reset();
+    localStorage.setItem("localTodos"  , JSON.stringify(pikachika)) ; 
+  }
+
+});
+
+// delete todos
+list.addEventListener('click', e => {	
+
+  
+  if(e.target.classList.contains('delete')){
+    e.target.parentElement.remove();
+    var retrievedData = localStorage.getItem("localTodos");
+    var displayTodos  = JSON.parse(retrievedData);
+    var delete1 = (e.target.parentElement.childNodes[1].outerText);
+ //   console.log(delete1);
+
+    for(index = 0  ; index < displayTodos.length ; index++)
+    {
+	//console.log(displayTodos[index]);
+	if(displayTodos[index] == delete1)
+		 displayTodos.splice(index, 1); 
+    }
+    //console.log(displayTodos);	
+     localStorage.setItem("localTodos" , JSON.stringify(displayTodos));
+	   
+  }
+
+});
+
+  </script>
+</body>
+</html>
